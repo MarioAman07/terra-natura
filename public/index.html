@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terra Natura — Samples Log</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Terra Natura</h1>
+    <p>Environmental Sampling & Analysis System</p>
+  </div>
+  <nav>
+    <a href="/api/export" class="btn btn-export">⬇ Export to Excel</a>
+    <a href="form.html" class="btn btn-outline">+ New Sample</a>
+  </nav>
+</header>
+
+<main>
+  <!-- Filter bar -->
+  <div class="filters">
+    <div class="filter-group">
+      <label>Sample Type</label>
+      <select id="filter-type">
+        <option value="">All types</option>
+        <option value="water"> Water</option>
+        <option value="soil"> Soil</option>
+        <option value="air"> Air</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Status</label>
+      <select id="filter-status">
+        <option value="">All statuses</option>
+        <option value="ready">Ready</option>
+        <option value="processed">Processed</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Date From</label>
+      <input type="date" id="filter-from">
+    </div>
+    <div class="filter-group">
+      <label>Date To</label>
+      <input type="date" id="filter-to">
+    </div>
+    <button class="btn btn-primary" onclick="loadSamples()"> Apply</button>
+    <button class="btn btn-cancel" onclick="resetFilters()"> Reset</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <div class="table-header">
+      <h2>Samples Log</h2>
+      <span id="count-label">Loading…</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date & Time</th>
+          <th>Location</th>
+          <th>Type</th>
+          <th>Employee</th>
+          <th>Results / Indicators</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="samples-body">
+        <!-- Rows inserted by JS -->
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

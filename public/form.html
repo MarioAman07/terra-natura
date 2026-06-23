@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terra Natura — Sample Form</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Terra Natura</h1>
+    <p>Environmental Sampling & Analysis System</p>
+  </div>
+  <nav>
+    <a href="/" class="btn btn-outline">← Back to Table</a>
+  </nav>
+</header>
+
+<div class="form-container">
+  <div class="form-card">
+    <h2 id="form-title">➕ New Sample</h2>
+
+    <div class="form-group">
+      <label for="datetime">Date & Time *</label>
+      <input type="datetime-local" id="datetime" required>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Location *</label>
+      <input type="text" id="location" placeholder="e.g. River Nura — Station 4 or 51.1801° N, 71.4460° E" required>
+      <span class="hint">Enter location name or GPS coordinates</span>
+    </div>
+
+    <div class="form-group">
+      <label for="type">Sample Type *</label>
+      <select id="type" required>
+        <option value="" disabled selected>Select type…</option>
+        <option value="water"> Water</option>
+        <option value="soil"> Soil</option>
+        <option value="air"> Air</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="employee">Responsible Employee *</label>
+      <input type="text" id="employee" placeholder="Full name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="results">Results / Indicators</label>
+      <textarea id="results" placeholder="e.g. pH: 7.2, turbidity: 3 NTU, dissolved O₂: 8.5 mg/L…"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status *</label>
+      <select id="status" required>
+        <option value="ready">Ready</option>
+        <option value="processed">Processed</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-save" onclick="saveSample()"> Save Sample</button>
+      <a href="/" class="btn btn-cancel">Cancel</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
