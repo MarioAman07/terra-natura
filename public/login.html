@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terra Natura — Login</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+
+    .login-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .login-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-card .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-card .brand .logo { font-size: 3rem; display: block; margin-bottom: 8px; }
+
+    .login-card .brand h2 {
+      font-size: 1.3rem;
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+
+    .login-card .brand p {
+      font-size: .8rem;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    .login-error {
+      background: #ffe0e0;
+      color: var(--red);
+      border: 1px solid #ffb3b3;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: .875rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .login-error.visible { display: block; }
+
+    .login-card .btn-save {
+      width: 100%;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: .75rem;
+      color: var(--text-soft);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"></div>
+  <div>
+    <h1>Terra Natura</h1>
+    <p>Environmental Sampling & Analysis System</p>
+  </div>
+</header>
+
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="brand">
+      <span class="logo"></span>
+      <h2>Sign In</h2>
+      <p>Enter your credentials to access the system</p>
+    </div>
+
+    <div class="login-error" id="login-error"></div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="admin" autocomplete="username">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+
+    <button class="btn btn-save" onclick="doLogin()"> Sign In</button>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  async function doLogin() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const errBox   = document.getElementById('login-error');
+
+    errBox.classList.remove('visible');
+
+    if (!username || !password) {
+      errBox.textContent = 'Please enter both username and password.';
+      errBox.classList.add('visible');
+      return;
+    }
+
+    try {
+      const res  = await fetch('/api/login', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        errBox.textContent = data.error || 'Login failed.';
+        errBox.classList.add('visible');
+        return;
+      }
+
+      window.location.href = '/';
+
+    } catch (err) {
+      errBox.textContent = 'Network error. Please try again.';
+      errBox.classList.add('visible');
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terra Natura — View Sample</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .detail-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .detail-card-header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      color: var(--white);
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .detail-card-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .detail-card-header span { font-size: .85rem; opacity: .75; }
+
+    .detail-body { padding: 28px; }
+
+    .detail-row {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      gap: 16px;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+
+    .detail-label {
+      min-width: 160px;
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-soft);
+      padding-top: 2px;
+    }
+
+    .detail-value {
+      font-size: .95rem;
+      color: var(--text);
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .detail-row { flex-direction: column; gap: 4px; }
+      .detail-label { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"></div>
+  <div>
+    <h1>Terra Natura</h1>
+    <p>Environmental Sampling & Analysis System</p>
+  </div>
+  <nav>
+    <a href="/" class="btn btn-outline">← Back to Table</a>
+  </nav>
+</header>
+
+<main>
+  <div class="detail-card" id="detail-card">
+    <div class="detail-card-header">
+      <h2>Loading sample…</h2>
+    </div>
+    <div class="detail-body">
+      <div class="empty-state">
+        <div class="icon"></div>
+        <p>Fetching sample data…</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+<script>
+  async function loadSampleDetail() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    if (!id) {
+      document.getElementById('detail-card').innerHTML = `
+        <div class="detail-card-header"><h2>Error</h2></div>
+        <div class="detail-body">
+          <div class="empty-state"><div class="icon"></div><p>No sample ID provided.</p></div>
+        </div>`;
+      return;
+    }
+
+    try {
+      const res  = await fetch('/api/samples/' + id);
+      if (res.status === 401) { window.location.href = '/login.html'; return; }
+      const s    = await res.json();
+      if (!res.ok) throw new Error(s.error);
+
+      document.title = `Terra Natura — Sample #${s.id}`;
+
+      const typeIcons = { water: '', soil: '', air: '' };
+
+      document.getElementById('detail-card').innerHTML = `
+        <div class="detail-card-header">
+          <h2>${typeIcons[s.type] || ''} Sample #${s.id}</h2>
+          <span>${s.type.charAt(0).toUpperCase() + s.type.slice(1)} · ${s.status}</span>
+        </div>
+        <div class="detail-body">
+          <div class="detail-row">
+            <span class="detail-label"> ID</span>
+            <span class="detail-value">${s.id}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"> Date & Time</span>
+            <span class="detail-value">${formatDate(s.datetime)}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"> Location</span>
+            <span class="detail-value">${escHtml(s.location)}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"> Sample Type</span>
+            <span class="detail-value"><span class="badge badge-${s.type}">${typeIcons[s.type]} ${s.type}</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"> Employee</span>
+            <span class="detail-value">${escHtml(s.employee)}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"> Results / Indicators</span>
+            <span class="detail-value">${escHtml(s.results || '—')}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"> Status</span>
+            <span class="detail-value"><span class="badge badge-${s.status}">${s.status}</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"> Created At</span>
+            <span class="detail-value">${formatDate(s.created_at)}</span>
+          </div>
+
+          <div class="detail-actions">
+            <a href="form.html?id=${s.id}" class="btn btn-edit" style="padding:9px 18px;font-size:.875rem;">Edit Sample</a>
+            <a href="/" class="btn btn-cancel" style="padding:9px 18px;font-size:.875rem;">← Back to Table</a>
+          </div>
+        </div>
+      `;
+    } catch (err) {
+      document.getElementById('detail-card').innerHTML = `
+        <div class="detail-card-header"><h2>Error</h2></div>
+        <div class="detail-body">
+          <div class="empty-state"><div class="icon"></div><p>${escHtml(err.message)}</p></div>
+        </div>`;
+    }
+  }
+
+  loadSampleDetail();
+</script>
+
+</body>
+</html>

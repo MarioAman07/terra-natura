@@ -14,13 +14,37 @@
     <p>Environmental Sampling & Analysis System</p>
   </div>
   <nav>
-    <a href="/api/export" class="btn btn-export">⬇ Export to Excel</a>
+    <span class="user-pill" id="user-pill"> <span id="nav-username">…</span></span>
+    <button class="btn btn-export" onclick="exportFiltered()">⬇ Export to Excel</button>
     <a href="form.html" class="btn btn-outline">+ New Sample</a>
+    <button class="btn btn-logout" onclick="doLogout()"> Logout</button>
   </nav>
 </header>
 
 <main>
-  <!-- Filter bar -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card stat-total">
+      <span class="stat-icon"></span>
+      <span class="stat-value" id="stat-total">—</span>
+      <span class="stat-label">Total Samples</span>
+    </div>
+    <div class="stat-card stat-water">
+      <span class="stat-icon"></span>
+      <span class="stat-value" id="stat-water">—</span>
+      <span class="stat-label">Water Samples</span>
+    </div>
+    <div class="stat-card stat-soil">
+      <span class="stat-icon"></span>
+      <span class="stat-value" id="stat-soil">—</span>
+      <span class="stat-label">Soil Samples</span>
+    </div>
+    <div class="stat-card stat-air">
+      <span class="stat-icon"></span>
+      <span class="stat-value" id="stat-air">—</span>
+      <span class="stat-label">Air Samples</span>
+    </div>
+  </div>
+
   <div class="filters">
     <div class="filter-group">
       <label>Sample Type</label>
@@ -47,11 +71,14 @@
       <label>Date To</label>
       <input type="date" id="filter-to">
     </div>
+    <div class="filter-group">
+      <label>Location Search</label>
+      <input type="text" id="filter-location" placeholder="Search location…" style="min-width:160px;">
+    </div>
     <button class="btn btn-primary" onclick="loadSamples()"> Apply</button>
-    <button class="btn btn-cancel" onclick="resetFilters()"> Reset</button>
+    <button class="btn btn-cancel"  onclick="resetFilters()"> Reset</button>
   </div>
 
-  <!-- Table -->
   <div class="table-wrapper">
     <div class="table-header">
       <h2>Samples Log</h2>
@@ -70,16 +97,24 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="samples-body">
-        <!-- Rows inserted by JS -->
-      </tbody>
+      <tbody id="samples-body"></tbody>
     </table>
   </div>
 </main>
 
-<!-- Toast notification -->
-<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="delete-modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-icon"></div>
+    <h3>Delete Sample?</h3>
+    <p id="modal-message">This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-modal-delete" onclick="confirmDelete()">Delete</button>
+      <button class="btn btn-modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+</div>
 
+<div class="toast" id="toast"></div>
 <script src="app.js"></script>
 </body>
 </html>

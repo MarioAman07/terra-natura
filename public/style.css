@@ -284,3 +284,100 @@ td {
   .td-actions { justify-content: flex-end; }
   .form-card { padding: 20px 18px; }
 }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform .15s, box-shadow .15s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(27,67,50,.14);
+}
+
+.stat-card .stat-icon { font-size: 1.6rem; }
+.stat-card .stat-value { font-size: 2rem; font-weight: 800; color: var(--green-dark); line-height: 1; }
+.stat-card .stat-label { font-size: .75rem; font-weight: 600; color: var(--text-soft); text-transform: uppercase; letter-spacing: .5px; }
+.stat-card.stat-water  { border-top: 3px solid #1d4ed8; }
+.stat-card.stat-soil   { border-top: 3px solid #92400e; }
+.stat-card.stat-air    { border-top: 3px solid #5b21b6; }
+.stat-card.stat-total  { border-top: 3px solid var(--green-mid); }
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 20px;
+  padding: 5px 14px 5px 10px;
+  font-size: .8rem;
+  color: var(--white);
+}
+
+.btn-logout {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.35);
+  color: var(--white);
+  padding: 7px 14px;
+  font-size: .8rem;
+}
+
+.btn-logout:hover { background: rgba(255,255,255,.25); }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-box {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(0,0,0,.25);
+  padding: 32px 28px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  transform: scale(.92) translateY(12px);
+  transition: transform .25s;
+}
+
+.modal-overlay.open .modal-box {
+  transform: scale(1) translateY(0);
+}
+
+.modal-box .modal-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.modal-box h3 { font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
+.modal-box p  { font-size: .875rem; color: var(--text-soft); margin-bottom: 24px; }
+
+.modal-actions { display: flex; gap: 12px; justify-content: center; }
+
+.btn-modal-delete  { background: var(--red);  color: var(--white); padding: 10px 24px; }
+.btn-modal-cancel  { background: #eee; color: var(--text-soft); padding: 10px 20px; }
